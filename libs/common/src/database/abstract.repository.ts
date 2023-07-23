@@ -1,7 +1,8 @@
 // IDEA: common repo from which other microservices can extend from and use common CRUD operations from our database
-import { Logger } from "@nestjs/common";
+import { Logger, NotFoundException } from "@nestjs/common";
 import { AbstractDocument } from "./abstract.schema";
-import { Model, Types} from "mongoose";
+import { Model, Types, FilterQuery} from "mongoose";
+import { filter } from "rxjs";
 
 export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     //nestjs js commong logger to make repo create to use CRUD methods
@@ -25,6 +26,18 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         //once promise is resolved, toJson converts Mongoose document to JS object without mongoose props
         //as unknows allows TS to treat result as changed to unknown type, as TDocument asserts object is TDocument type
         return (await createdDocument.save()).toJSON() as unknown as TDocument;
+    }
+
+    //filterQuery = query criteria for finding the document
+    async findOne(filterQuery: FilterQuery<TDocument>): Promise<TDocument> {
+        //lean= return document as plain JS object rather than Mongoose. No Hydration
+        const document = await this.model.findOne(filterQuery, {}, {lean: true}); //fields not specified
+
+        if (!document) {
+            this.logger.warn("Document was not found with", filterQuery);
+            throw new NotFoundException("Document not Found") //HTTP STATUS CODE SET TO 404 automatically
+        }
+        return document; //return document if found
     }
     
 }
