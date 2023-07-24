@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import {ConfigService } from '@nestjs/config';
 import { ConfigModule } from '../config/config.module';
-import { MongooseModule } from '@nestjs/mongoose';
+import { ModelDefinition, MongooseModule } from '@nestjs/mongoose';
 
 @Module({
     //async configuration. forRoot is sync.
@@ -18,4 +18,9 @@ import { MongooseModule } from '@nestjs/mongoose';
     
     ]
 })
-export class DatabaseModule {}
+export class DatabaseModule {
+    //To allow modules to import in DatabaseModule to provide their Mongoose Models like i.e ReservationDocument
+    static forFeature(models: ModelDefinition[]) { //array of Mongoose Models to be used 
+        return MongooseModule.forFeature(models);
+    }
+}

@@ -1,11 +1,15 @@
-import { Module } from '@nestjs/common';
-import { ReservationsController } from './reservations.controller';
+import { Module } from '@nestjs/common'
 import { ReservationsService } from './reservations.service';
+import { ReservationsController } from './reservations.controller';
+import { ReservationRepository } from './reservations.repository';
 import { DatabaseModule } from '@app/common';
+import { ReservationDocument, ReservationSchema } from './models/reservations.schema';
 
 @Module({
-  imports: [DatabaseModule],
+  //In the object we provide the name which is the injection token that we used to inject this model so can be found in ReservationRepository 
+  //in the object we also provide the ReservationSchema
+  imports: [DatabaseModule, DatabaseModule.forFeature([{ name: ReservationDocument.name, schema: ReservationSchema}])],
   controllers: [ReservationsController],
-  providers: [ReservationsService],
+  providers: [ReservationsService, ReservationRepository]
 })
 export class ReservationsModule {}
