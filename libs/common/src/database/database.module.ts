@@ -19,7 +19,7 @@ import { ModelDefinition, MongooseModule } from '@nestjs/mongoose';
     ]
 })
 export class DatabaseModule {
-    //To allow modules to import in DatabaseModule to provide their Mongoose Models like i.e ReservationDocument
+    //To allow modules to provide their Mongoose models to the DatabaseModule i.e. provide ReservationDocument
     static forFeature(models: ModelDefinition[]) { //array of Mongoose Models to be used 
         return MongooseModule.forFeature(models);
     }
