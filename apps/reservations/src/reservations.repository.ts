@@ -13,7 +13,7 @@ export class ReservationRepository extends AbstractRepository<ReservationDocumen
         //inject the model from Mongoose which will be used to manipulate the documents
         @InjectModel(ReservationDocument.name) reservationModel: Model<ReservationDocument>
     ) {
-        //calling super to pass in the to the reservation document
+        //calling super to pass in the to the reservation 
         super(reservationModel);
     }
 }   
