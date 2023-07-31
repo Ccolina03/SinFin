@@ -1,5 +1,6 @@
 import { AbstractDocument } from "@app/common";
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
+import {isDate} from 'class-validator'
 
 //Idea: Extends from Abstracts so has _id and the following properties of reservation
 @Schema({ versionKey: false})
