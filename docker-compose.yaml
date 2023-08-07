@@ -12,7 +12,7 @@ services:
     command: pnpm run start:dev reservations
     ports: 
       - '3000:3000'
-    #mounts entire project in local machine to this path inside of the container
+    # It's specifying that the current directory (the root of your project) on your local machine should be mounted into the /usr/src/app directory inside the container
     # will have to docker-compose up --build if adding a new dependency
     volumes: 
       - /usr/src/app/node_modules #preventing local node_modules from overwriting the ones in Linux Image

@@ -2,7 +2,7 @@
 FROM node:alpine as development
 
 # Creating working directory
-WORkDIR /usr/src/app 
+WORKDIR /usr/src/app 
 
 # Copying package.json and pnpm to working directory. Allows to employ commands in working directory
 COPY package.json ./  
@@ -61,3 +61,4 @@ CMD ["node", "dist/apps/reservations/main"]
 #Press the Windows key + X on your keyboard to open the Win+X menu.
 #Choose "Windows PowerShell (Admin)" from the menu. This will open an elevated PowerShell window.
 #In the elevated PowerShell window, type wsl and press Enter. This will start Ubuntu on WSL2.
+# After this made Docker-compose file with reservations and mongo as the two initial services to start on. 
