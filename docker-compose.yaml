@@ -17,5 +17,16 @@ services:
     volumes: 
       - /usr/src/app/node_modules #preventing local node_modules from overwriting the ones in Linux Image
       - .:/usr/src/app
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: pnpm run start:dev auth
+    ports:
+      - '3001:3001'
+    volumes:
+      - /usr/src/app/node_modules #preventing local node_modules from overwriting the ones in Linux Image
+      - .:/usr/src/app
   mongo: 
     image: mongo
