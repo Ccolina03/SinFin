@@ -1,10 +1,10 @@
-# extend prexisting images (will have two stages)
+
 FROM node:alpine as development
 
-# Creating working directory
+
 WORKDIR /usr/src/app 
 
-# Copying package.json and pnpm to working directory. Allows to employ commands in working directory
+
 COPY package.json ./  
 COPY pnpm-lock.yaml ./  
 
