@@ -17,6 +17,8 @@ services:
     volumes: 
       - /usr/src/app/node_modules #preventing local node_modules from overwriting the ones in Linux Image
       - .:/usr/src/app
+    env_file: 
+      - ./apps/reservations/.env
   auth:
     build:
       context: .
@@ -28,5 +30,8 @@ services:
     volumes:
       - /usr/src/app/node_modules #preventing local node_modules from overwriting the ones in Linux Image
       - .:/usr/src/app
+    env_file: 
+      - ./apps/auth/.env    #path to env file from auth
+
   mongo: 
     image: mongo
