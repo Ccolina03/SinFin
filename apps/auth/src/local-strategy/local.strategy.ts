@@ -1,5 +1,5 @@
 //Idea: Passing JWT token in the cookie
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { Strategy } from "passport-jwt";
 import {PassportStrategy} from '@nestjs/passport'
 import { UsersService } from "../users/users.service";
@@ -11,7 +11,11 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     } 
 
     async validate(username: string, password: string) {
-         //UsersService method to validate both props being passed on and its existance in our database. Users because in this collection we persist that information
-        return this.usersService.verifyUser(username, password);  
+         //Checking with usersService the existance of user. If not catch error from the one thrown in verifyUser. 
+        try {
+            return this.usersService.verifyUser(username, password);  
+        } catch (err) {
+            throw new UnauthorizedException(err);
+        }
     }
 }
