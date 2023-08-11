@@ -1,0 +1,37 @@
+services:
+  reservations: 
+    #reservations with build key
+    build: 
+      #context is where we want to run the Docker build from 
+      context: . #root
+      #path to Dockerfile
+      dockerfile: ./apps/reservations/Dockerfile
+      #Target stage. Here 2 Stages: development dep needed when developing app
+      target: development
+      #overriding the default command of dist, hot reloading implemented
+    command: pnpm run start:dev reservations
+    ports: 
+      - '3000:3000'
+    # It's specifying that the current directory (the root of your project) on your local machine should be mounted into the /usr/src/app directory inside the container
+    # will have to docker-compose up --build if adding a new dependency
+    volumes: 
+      - /usr/src/app/node_modules #preventing local node_modules from overwriting the ones in Linux Image
+      - .:/usr/src/app
+    env_file: 
+      - ./apps/reservations/.env
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: pnpm run start:dev auth
+    ports:
+      - '3001:3001'
+    volumes:
+      - /usr/src/app/node_modules #preventing local node_modules from overwriting the ones in Linux Image
+      - .:/usr/src/app
+    env_file: 
+      - ./apps/auth/.env    #path to env file from auth
+
+  mongo: 
+    image: mongo
