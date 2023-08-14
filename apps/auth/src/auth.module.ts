@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { LoggerModule } from '@app/common';
 import { LocalStrategy } from './local-strategy/local.strategy';
+import { JwtStrategy } from './jwt-strategy/jwt.strategy';
 
 @Module({
   imports: [UsersModule, 
@@ -35,6 +36,6 @@ import { LocalStrategy } from './local-strategy/local.strategy';
     inject: [ConfigService],//injecting ConfigService to useFactory
   })],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
 })
 export class AuthModule {}

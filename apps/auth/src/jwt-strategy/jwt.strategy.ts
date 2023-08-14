@@ -9,7 +9,7 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    //Idea: Validate jwt token from _id 
+    //Idea: JwtStrategy extracts token from cookie.Authentication and validates it using JWT_SECRET
     constructor(
         configService: ConfigService,
         private readonly usersService: UsersService,
@@ -28,8 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         )
     }
 
-    //validate function to verify jwt using _id from user since I used payload with _id to generate the token
-    //Creating interface for parameter userId
+    //gets User using the _id from the token payload and adds the user to the request in the controller.
     async validate ({userId}: TokenPayload) {
         return this.usersService.getUser({_id: userId}); //userId is an object property that is the value of the prop name _id
     }
