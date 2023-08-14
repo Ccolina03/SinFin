@@ -5,8 +5,7 @@ import { LocalAuthGuard } from './guards/local-auth-guard';
 import { CurrentUser } from './current-user.decorator';
 import { UsersDocument } from './users/models/users.schema';
 
-@Controller('auth') //path auth
-
+@Controller('auth') //path authW
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -15,11 +14,12 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login (
-    //pulled user of strategy return
+    //pulled user of strategy return (which is the authenticated user)
     @CurrentUser() user: UsersDocument, 
-    @Res({passthrough: true}) response: Response,
+    @Res({passthrough: true}) response: Response, //allows access to response objects so cookies can be set
   ) {
-      const jwt = await this.authService.login(user, response);
+      await this.authService.login(user, response);
+      response.send(user);    //cookie is set up in response now
   }
  
 }

@@ -7,5 +7,5 @@ const getCurrentUserByContext = (context: ExecutionContext): UsersDocument => {
 }
 
 export const CurrentUser = createParamDecorator(
-    (_data: unknown, context: ExecutionContext) => getCurrentUserByContext(context);
+    (_data: unknown, context: ExecutionContext) => getCurrentUserByContext(context),
 )
