@@ -5,7 +5,9 @@ import { UsersService } from "../users/users.service";
 import { Request } from "express";
 import { ExtractJwt } from "passport-jwt";
 import { TokenPayload } from "../interfaces/token-payload.interface";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
     //Idea: Validate jwt token from _id 
     constructor(
@@ -21,14 +23,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
                         request?.cookies?.Authentication
                     ]),
                 //secret to decode JWT 
-                secretOrKey: configService.get<string>('JWT_SECRET');
+                secretOrKey: configService.get<string>('JWT_SECRET'),
             }   
         )
     }
 
     //validate function to verify jwt using _id from user since I used payload with _id to generate the token
     //Creating interface for parameter userId
-    async validate (userId: TokenPayload) {
-        return this.usersService.validateJWTUser(userId);
+    async validate ({userId}: TokenPayload) {
+        return this.usersService.getUser({_id: userId}); //userId is an object property that is the value of the prop name _id
     }
 }
