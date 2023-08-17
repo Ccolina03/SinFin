@@ -8,10 +8,19 @@ import * as Joi from 'joi';
 import { LoggerModule } from '@app/common';
 import { LocalStrategy } from './local-strategy/local.strategy';
 import { JwtStrategy } from './jwt-strategy/jwt.strategy';
-
+import { ClientsModule } from '@nestjs/microservices';
 @Module({
   imports: [UsersModule, 
   LoggerModule,
+  ClientsModule.registerAsync({
+    useFactory: (configService: ConfigService) => {
+      transport: Transport.RMQ,
+      options: {
+        urls: configService.get<string>('RABBITMQ_URI')
+        queue: configService.get<string>('RABBITMQ_QUEUE')
+      }
+    }
+  }),
   ConfigModule.forRoot({
     isGlobal: true,
     envFilePath: './apps/auth/.env',
@@ -35,6 +44,7 @@ import { JwtStrategy } from './jwt-strategy/jwt.strategy';
     },
     inject: [ConfigService],//injecting ConfigService to useFactory
   })],
+
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
 })

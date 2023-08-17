@@ -4,6 +4,7 @@ import { Response } from 'express';
 import { LocalAuthGuard } from './guards/local-auth-guard';
 import { CurrentUser } from './current-user.decorator';
 import { UsersDocument } from './users/models/users.schema';
+import { JwtAuthGuards } from './guards/jwt-auth-guards';
 
 @Controller('auth') //path authW
 export class AuthController {
@@ -20,6 +21,16 @@ export class AuthController {
   ) {
       await this.authService.login(user, response);
       response.send(user);    //cookie is set up in response now
+  }
+
+
+  //Idea: MessagePattern sends jwt extracted from common/lib/jwtAuthGuard which useGuard employs to validate and return user which is recovered from payload (has been added to request by validate)
+  @UseGuards(JwtAuthGuards)
+  @MessagePattern('AuthenticateRMQ')
+  async authenticate (
+    @Payload() data: any
+  ) {
+      return data.user;   //authenticated user returned to JwtAuthGuard where is piped to the request(context) object and later pull from the request object by the CurrentUserDecorator
   }
  
 }

@@ -28,4 +28,6 @@ export class AuthService {
 
     return generatedToken;   //token passed on as a cookie 
   }
+
+  
 }
