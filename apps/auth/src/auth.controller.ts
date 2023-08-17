@@ -4,9 +4,11 @@ import { Response } from 'express';
 import { LocalAuthGuard } from './guards/local-auth-guard';
 import { CurrentUser } from './current-user.decorator';
 import { UsersDocument } from './users/models/users.schema';
-import { JwtAuthGuards } from './guards/jwt-auth-guards';
+import { JwtAuthGuards } from './guards/jwt-auth-guards'
+import { MessagePattern } from '@nestjs/microservices';
+import { Payload } from '@nestjs/microservices';
 
-@Controller('auth') //path authW
+@Controller('auth') //path auth
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -24,7 +26,7 @@ export class AuthController {
   }
 
 
-  //Idea: MessagePattern sends jwt extracted from common/lib/jwtAuthGuard which useGuard employs to validate and return user which is recovered from payload (has been added to request by validate)
+  //Idea: Through MessagePattern jwt extracted from common/lib/jwtAuthGuard and sent to useGuard here where it employs to validate and returns user which is recovered from payload (has been added to request by validate)
   @UseGuards(JwtAuthGuards)
   @MessagePattern('AuthenticateRMQ')
   async authenticate (
